@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Complaint System</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 400px; }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 15px; color: #666; }
+        input[type="text"], select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; }
+        .footer a { color: #333; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Submit a Complaint</h2>
+    <form action="submit.php" method="POST" onsubmit="return validateForm()">
+        <label for="category">Category</label>
+        <select name="category" id="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="Lecturer">Lecturer Issue</option>
+            <option value="Facilities">Facilities / Classroom</option>
+            <option value="Exams">Exams & Results</option>
+            <option value="Hostel">Hostel / Accommodation</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="message">Description</label>
+        <textarea name="message" id="message" rows="5" placeholder="Describe your issue here..." required></textarea>
+
+        <label style="display: flex; align-items: center; margin-top: 15px;">
+            <input type="checkbox" name="is_anonymous" value="1" style="width: auto; margin-right: 10px;"> Submit Anonymously
+        </label>
+
+        <button type="submit">Submit Complaint</button>
+    </form>
+    <div class="footer">
+        <a href="admin_login.php">Admin Login</a>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var category = document.getElementById("category").value;
+        var message = document.getElementById("message").value;
+        if (category == "" || message.trim() == "") {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>
