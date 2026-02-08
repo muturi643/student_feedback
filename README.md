@@ -1,7 +1,29 @@
 # Student Feedback System (PHP & MySQL)
 
-A simple PHP-based Student Feedback System that allows students to submit feedback and administrators to log in and view feedback data.  
-Built using **PHP**, **MySQL**, and **XAMPP**.
+A simple **Student Complaint / Feedback Management System** built with **PHP**, **MySQL**, **HTML**, and **CSS**.  
+Students can submit complaints, while admins can log in, view, and manage feedback via a dashboard.
+
+---
+
+## 📁 Project Structure
+
+```
+
+student_feedback/
+│
+├── index.html          # Student Complaint Form (Home)
+├── submit.php          # Logic to save complaints
+├── admin_login.php     # Admin Login Page
+├── dashboard.php       # Admin Dashboard (View/Resolve)
+├── logout.php          # Logout Logic
+├── db_connect.php      # Database Connection (Critical!)
+│
+├── css/
+│   └── style.css       # Styles
+│
+└── vercel.json         # Required for Vercel hosting
+
+```
 
 ---
 
@@ -9,91 +31,103 @@ Built using **PHP**, **MySQL**, and **XAMPP**.
 
 Make sure you have the following installed:
 
-- Windows 10 / 11
 - **XAMPP** (Apache + MySQL)
-- PHP **8.x** (comes with XAMPP)
-- Web browser (Chrome, Edge, Firefox)
+- **PHP 8+**
+- **MySQL / MariaDB**
+- **Git**
+- Web Browser (Chrome, Edge, Firefox)
 
 ---
 
-## 📦 Project Structure
-
-```
-
-student_feedback/
-│
-├── admin_login.php
-├── db_connect.php
-├── index.php
-├── submit_feedback.php
-├── assets/
-│   └── css/
-├── database/
-│   └── student_feedback.sql
-└── README.md
-
-```
-
----
-
-## ⚙️ XAMPP SETUP (IMPORTANT)
+## 🔧 XAMPP Setup (IMPORTANT)
 
 ### 1️⃣ Install XAMPP
-Download and install XAMPP from:  
-👉 https://www.apachefriends.org/index.html
+Download from:
+```
 
-During installation:
-- Enable **Apache**
-- Enable **MySQL**
+[https://www.apachefriends.org/](https://www.apachefriends.org/)
+
+````
+
+During installation, ensure these are checked:
+- ✅ Apache
+- ✅ MySQL
+- ✅ PHP
+- ✅ phpMyAdmin
 
 ---
 
 ### 2️⃣ Start Services
 Open **XAMPP Control Panel** and start:
-- ✅ Apache
-- ✅ MySQL
+- ▶ Apache
+- ▶ MySQL
 
-Both should turn **green**.
+Both must show **Running** ✅
 
 ---
 
-### 3️⃣ Move Project Folder
-Copy your project folder to:
+## 📥 Clone the Repository
+
+Open **Git Bash / PowerShell**:
+
+```bash
+cd C:\xampp\htdocs
+git clone https://github.com/muturi643/student_feedback.git
+cd student_feedback
+````
+
+> Your project path should look like:
 
 ```
-
 C:\xampp\htdocs\student_feedback
-
 ```
-
-⚠️ **Do NOT run PHP projects directly from Downloads** when using XAMPP.
 
 ---
 
-## 🗄️ DATABASE SETUP (MySQL)
+## 🗄️ Database Setup (MySQL)
 
 ### 1️⃣ Open phpMyAdmin
+
 Go to:
+
 ```
-
-[http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-
-````
+http://localhost/phpmyadmin
+```
 
 ---
 
 ### 2️⃣ Create Database
-Click **New**, then:
 
-- Database name: `student_feedback`
-- Collation: `utf8mb4_general_ci`
-- Click **Create**
+```sql
+CREATE DATABASE student_feedback;
+```
 
 ---
 
-### 3️⃣ Create Tables (SQL)
+### 3️⃣ Use the Database
 
-Run this SQL inside the database:
+```sql
+USE student_feedback;
+```
+
+---
+
+### 4️⃣ Create Complaints Table
+
+```sql
+CREATE TABLE complaints (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    complaint TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+### 5️⃣ (Optional) Create Admin Table
 
 ```sql
 CREATE TABLE admins (
@@ -101,53 +135,51 @@ CREATE TABLE admins (
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+```
 
-CREATE TABLE feedback (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    student_name VARCHAR(100),
-    reg_number VARCHAR(50),
-    message TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+Insert a test admin (password: **admin123**):
 
--- Default admin login
+```sql
 INSERT INTO admins (username, password)
 VALUES ('admin', MD5('admin123'));
-````
+```
 
 ---
 
-## 🔌 DATABASE CONNECTION (db_connect.php)
+## 🔌 Database Connection (`db_connect.php`)
 
-Make sure your `db_connect.php` looks like this:
+Make sure your file looks like this:
 
 ```php
 <?php
 $host = "localhost";
 $user = "root";
-$pass = "";
-$db   = "student_feedback";
+$password = "";
+$database = "student_feedback";
 
-$conn = new mysqli($host, $user, $pass, $db);
+$conn = new mysqli($host, $user, $password, $database);
 
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 ?>
 ```
 
-✅ **XAMPP default MySQL user is `root` with NO password**
+⚠️ **Important**
+
+* MySQL must be running
+* Default MySQL port is **3306**
 
 ---
 
-## ▶️ RUNNING THE PROJECT
+## ▶ Running the Project
 
-### Option A: Using Apache (Recommended)
+### Option 1: Apache (Recommended)
 
-Open browser and go to:
+Open browser:
 
 ```
-http://localhost/student_feedback/
+http://localhost/student_feedback/index.html
 ```
 
 Admin login:
@@ -158,12 +190,11 @@ http://localhost/student_feedback/admin_login.php
 
 ---
 
-### Option B: PHP Built-in Server (Optional)
+### Option 2: PHP Built-in Server
 
-If you insist on using CLI:
+From the project folder:
 
-```powershell
-cd C:\xampp\htdocs\student_feedback
+```bash
 php -S localhost:8000
 ```
 
@@ -173,76 +204,69 @@ Then open:
 http://localhost:8000
 ```
 
-⚠️ MySQL **MUST be running in XAMPP**, or you’ll get:
+---
 
-```
-No connection could be made because the target machine actively refused it
-```
+## 🌐 Vercel Hosting (Frontend Only)
+
+> ⚠️ PHP **does NOT run on Vercel**.
+> `vercel.json` is included for static deployment only.
+
+For full PHP + MySQL hosting, use:
+
+* InfinityFree
+* 000Webhost
+* Render
+* Railway
+* Hostinger
 
 ---
 
-## ❌ COMMON ERRORS & FIXES
+## ❗ Common Errors & Fixes
 
-### ❗ Error: Connection Refused
+### ❌ `No connection could be made because the target machine actively refused it`
 
-**Cause:** MySQL is not running
-**Fix:** Start MySQL in XAMPP Control Panel
+✔ Fix:
 
----
-
-### ❗ Error: php.exe not found
-
-**Fix:**
-Add PHP to PATH:
-
-```
-C:\xampp\php
-```
-
-Restart terminal.
+* Start MySQL in XAMPP
+* Check `db_connect.php`
+* Ensure database name is correct
 
 ---
 
-### ❗ Port 3306 Error
+### ❌ `php is not recognized`
 
-**Fix:**
+✔ Fix:
 
-* Open XAMPP → Config → Service & Port Settings
-* Ensure MySQL port is **3306**
+* Add PHP to system PATH
+  OR
+* Use:
 
----
-
-## 🔐 DEFAULT ADMIN LOGIN
-
-```
-Username: admin
-Password: admin123
+```bash
+C:\xampp\php\php.exe -v
 ```
 
-(Change this before production.)
+---
+
+## ✅ Features
+
+* Student complaint submission
+* Secure database storage
+* Admin login system
+* Admin dashboard
+* Complaint status tracking
+* Clean folder structure
 
 ---
 
-## 🛠️ TECHNOLOGIES USED
+## 👨‍💻 Author
 
-* PHP 8.x
-* MySQL
-* XAMPP
-* HTML / CSS
-* phpMyAdmin
-
----
-
-## 📄 LICENSE
-
-This project is for **academic and learning purposes**.
-
----
-
-## 👨‍💻 AUTHOR
-
-Developed by **Ernest Mwaura**
+**Ernest Mwaura**
 Telegram: **@Mrmwas24**
 
-```
+---
+
+## 📜 License
+
+This project is for **educational purposes**.
+Feel free to modify and improve it.
 
